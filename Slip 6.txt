@@ -1,0 +1,91 @@
+Slip 6
+
+Q.1) Develop an Express.js application that defines routes for Create and Read operations
+on a resource (products).
+Ans: 
+mkdir express-products-app
+cd express-products-app
+npm init -y
+npm install express
+nano app.js
+ 
+const express = require('express');
+const app = express();
+const port = 3000;
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Sample in-memory product data (you can replace this with a database later)
+let products = [
+  { id: 1, name: 'Product 1', price: 100 },
+  { id: 2, name: 'Product 2', price: 200 }
+];
+
+// CREATE Route: Add a new product
+app.post('/products', (req, res) => {
+  const { name, price } = req.body;
+  
+  if (!name || !price) {
+    return res.status(400).json({ error: 'Name and price are required' });
+  }
+
+  const newProduct = {
+    id: products.length + 1,  // Generate a new ID
+    name,
+    price
+  };
+
+  products.push(newProduct);
+  res.status(201).json(newProduct);  // Respond with the created product
+});
+
+// READ Route: Get all products
+app.get('/products', (req, res) => {
+  res.status(200).json(products);  // Return the list of products
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
+
+
+node app.js
+
+Q2. Find a company with a workforce greater than 30 in the array. (Using find by
+id method)
+Ans:
+mkdir company-search
+cd company-search
+nano index.html 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Workforce Search</title>
+</head>
+<body>
+  <h1>Find Company with Workforce Greater than 30</h1>
+  <script>
+    // Array of company objects
+    const companies = [
+      { id: 1, name: 'Company A', workforce: 25 },
+      { id: 2, name: 'Company B', workforce: 50 },
+      { id: 3, name: 'Company C', workforce: 15 },
+      { id: 4, name: 'Company D', workforce: 35 }
+    ];
+
+    // Find a company with a workforce greater than 30
+    const companyWithLargeWorkforce = companies.find(company => company.workforce > 30);
+
+    if (companyWithLargeWorkforce) {
+      console.log('Company with workforce greater than 30:', companyWithLargeWorkforce);
+    } else {
+      console.log('No company with workforce greater than 30 found.');
+    }
+  </script>
+</body>
+</html>
