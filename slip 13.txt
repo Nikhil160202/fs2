@@ -1,0 +1,101 @@
+slip 13 
+.1) Extend the previous Express.js application to include middleware for parsing
+request bodies (e.g., JSON, form data) and validating input data. Send appropriate JSON
+responses for success and error cases
+Ans:
+mkdir express-middleware-app
+cd express-middleware-app
+npm init -y
+npm install express body-parser
+nano app.js
+
+const express = require('express');
+const bodyParser = require('body-parser'); // For parsing JSON and form data
+const app = express();
+
+// Middleware for parsing request bodies
+app.use(bodyParser.json()); // Parse JSON bodies
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded form data
+
+// Custom middleware for input validation
+const validateInput = (req, res, next) => {
+    const { name, age } = req.body;
+
+    // Validate that 'name' and 'age' are provided
+    if (!name || typeof name !== 'string') {
+        return res.status(400).json({ error: 'Invalid input: "name" is required and must be a string.' });
+    }
+    if (!age || typeof age !== 'number') {
+        return res.status(400).json({ error: 'Invalid input: "age" is required and must be a number.' });
+    }
+
+    next(); // If validation passes, proceed to the next middleware or route handler
+};
+
+// Route that uses validation middleware
+app.post('/user', validateInput, (req, res) => {
+    const { name, age } = req.body;
+
+    // Simulate saving the user to a database
+    const user = { id: Date.now(), name, age };
+
+    // Send success response
+    res.status(201).json({ message: 'User created successfully!', user });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+});
+
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+Run application using below cmd
+node app.js
+
+
+Q.2) Create a simple Angular component that takes input data and displays it.
+ans 
+
+npm install -g @angular/cli	
+ng new angular-component-demo
+cd angular-component-demo
+cd angular-component-demo
+
+ nano display-data.component.ts
+ 
+ import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-display-data',
+  templateUrl: './display-data.component.html',
+  styleUrls: ['./display-data.component.css']
+})
+export class DisplayDataComponent {
+  @Input() data!: string; // Input property to receive data
+}
+
+
+nano display-data.component.html
+
+<div>
+  <h2>Data Display</h2>
+  <p>{{ data }}</p>
+</div>
+
+nano  app.component.html
+
+<div>
+  <h1>Angular Component Demo</h1>
+  <app-display-data [data]="'Hello from Angular!'"></app-display-data>
+</div>
+
+ng serve
+
+
+Visit http://localhost:4200.
