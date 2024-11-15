@@ -1,0 +1,107 @@
+slip 10 
+
+Q.1) Implement a simple server using Node.js.
+Ans:
+mkdir simple-node-server
+cd simple-node-server
+npm init -y
+nano server.js
+
+// Import the http module to create the server
+const http = require('http');
+
+// Define the server and its request handling logic
+const server = http.createServer((req, res) => {
+  // Set the response headers
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+
+  // Write the response body
+  res.end('Hello, World!\n');
+});
+
+// Set the port the server will listen to
+const port = 3000;
+
+// Start the server
+server.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}/`);
+});
+
+
+node server.js
+
+For out put 
+
+
+http://localhost:3000
+
+
+Q2. Q.2) Extend the previous Express.js application to include middleware for parsing
+request bodies (e.g., JSON, form data) and validating input data. Send appropriate JSON
+responses for success and error cases.
+Ans
+
+npm install express express-validator
+
+nano server.js
+
+// Import necessary modules
+const express = require('express');
+const { body, validationResult } = require('express-validator');
+const app = express();
+const port = 3000;
+
+// Middleware to parse JSON and form data
+app.use(express.json());  // Parse JSON request bodies
+app.use(express.urlencoded({ extended: true }));  // Parse URL-encoded form data
+
+// In-memory storage for users (for demo purposes)
+
+let users = [];
+
+// Create operation: POST route to add a new user
+app.post(
+  '/users',
+  // Validate input data
+  body('name').isString().withMessage('Name must be a string').notEmpty().withMessage('Name is required'),
+  body('email').isEmail().withMessage('Email must be valid').notEmpty().withMessage('Email is required'),
+  (req, res) => {
+    // Handle validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() }); // Return validation errors
+    }
+
+    const { name, email } = req.body;
+
+    // Create new user
+    const newUser = {
+      id: users.length + 1, // Auto-incrementing user ID
+      name,
+      email,
+    };
+
+    users.push(newUser); // Add new user to the array
+
+    // Return success response
+    return res.status(201).json({
+      message: 'User created successfully',
+      user: newUser,
+    });
+  }
+);
+
+// Read operation: GET route to fetch all users
+app.get('/users', (req, res) => {
+  res.status(200).json({ message: 'List of all users', users });
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+
+
+node server.js
+
+
