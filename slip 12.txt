@@ -1,0 +1,117 @@
+slip 12 
+
+Q.1) Write an AngularJS script to print details of Employee (employee name, employee
+Id,Pin code, address etc.) in tabular form using ng-repeat.
+Ans
+Create a folder named angularjs-app.
+nano index.html
+
+<!DOCTYPE html>
+<html lang="en" ng-app="employeeApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Details</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="EmployeeController">
+
+  <h2>Employee Details</h2>
+
+  <!-- Table to display employee details -->
+  <table border="1" cellspacing="0" cellpadding="10">
+    <thead>
+      <tr>
+        <th>Employee ID</th>
+        <th>Employee Name</th>
+        <th>Address</th>
+        <th>Pin Code</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Loop through employees using ng-repeat -->
+      <tr ng-repeat="employee in employees">
+        <td>{{ employee.id }}</td>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.address }}</td>
+        <td>{{ employee.pinCode }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    // Define the AngularJS application module
+    var app = angular.module('employeeApp', []);
+
+    // Define the controller for the application
+    app.controller('EmployeeController', function($scope) {
+      // Sample employee data
+      $scope.employees = [
+        { id: 1, name: 'John Doe', address: '1234 Elm Street', pinCode: '123456' },
+        { id: 2, name: 'Jane Smith', address: '5678 Oak Avenue', pinCode: '654321' },
+        { id: 3, name: 'Michael Johnson', address: '9101 Pine Road', pinCode: '112233' },
+        { id: 4, name: 'Emily Davis', address: '1213 Maple Lane', pinCode: '445566' }
+      ];
+    });
+  </script>
+
+</body>
+</html>
+
+
+Q.2) Develop an Express.js application that defines routes for Create operations
+on a resource (User).
+
+mkdir express-user-app
+cd express-user-app
+apt init -y
+
+apt install express body-parser
+
+nano server.js
+
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const port = 3000;
+
+// Middleware to parse the request body as JSON
+app.use(bodyParser.json());
+
+// In-memory user data (as a simple database substitute)
+let users = [];
+
+// Route to create a new user (POST)
+app.post('/users', (req, res) => {
+  const { name, email } = req.body; // Get data from the request body
+
+  // Simple validation
+  if (!name || !email) {
+    return res.status(400).json({ message: 'Name and email are required' });
+  }
+
+  // Create a new user
+  const newUser = {
+    id: users.length + 1, // Assign an ID (for simplicity, just increment the length)
+    name,
+    email,
+  };
+
+  // Add the user to the "database" (in-memory array)
+  users.push(newUser);
+
+  // Send a success response
+  return res.status(201).json({
+    message: 'User created successfully',
+    user: newUser,
+  });
+});
+
+// Start the Express server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
+
+node server.js
+
+Server is running on http://localhost:3000.
