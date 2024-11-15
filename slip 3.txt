@@ -1,0 +1,72 @@
+slip 3 
+
+Q1. Write an AngularJS script to display list of games stored in an array on click of
+button using ng-click and also demonstrate ng-init, ng-bind directive of AngularJS.
+Ans
+
+nano index.html 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game List Display</title>
+  <!-- Include AngularJS library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-app="gameApp" ng-controller="gameController">
+
+<h1>Game List</h1>
+
+  <!-- Initialize the list of games with ng-init -->
+  <div ng-init="games = ['Football', 'Basketball', 'Tennis', 'Cricket', 'Baseball']; showGames = false;">
+    <!-- Button to trigger ng-click to show games -->
+    <button ng-click="showGames = !showGames">Show Games</button>
+
+    <!-- Display the list of games using ng-bind if showGames is true -->
+    <ul ng-show="showGames">
+      <li ng-bind="game" ng-repeat="game in games"></li>
+    </ul>
+  </div>
+
+</body>
+</html>
+
+
+Q.2) Find a company with a workforce greater than 30 in the array (use find by
+id method)
+Ans
+mkdir company-search
+cd company-search
+nano index.html 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Workforce Search</title>
+</head>
+<body>
+  <h1>Find Company with Workforce Greater than 30</h1>
+  <script>
+    // Array of company objects
+    const companies = [
+      { id: 1, name: 'Company A', workforce: 25 },
+      { id: 2, name: 'Company B', workforce: 50 },
+      { id: 3, name: 'Company C', workforce: 15 },
+      { id: 4, name: 'Company D', workforce: 35 }
+    ];
+
+    // Find a company with a workforce greater than 30
+    const companyWithLargeWorkforce = companies.find(company => company.workforce > 30);
+
+    if (companyWithLargeWorkforce) {
+      console.log('Company with workforce greater than 30:', companyWithLargeWorkforce);
+    } else {
+      console.log('No company with workforce greater than 30 found.');
+    }
+  </script>
+</body>
+</html>
