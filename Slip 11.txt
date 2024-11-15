@@ -1,0 +1,124 @@
+Slip 11
+
+Q.1) Develop an Express.js application that defines routes for Create operations
+on a resource (Movie).
+Ans 
+mkdir movieApp
+cd movieApp
+npm init -y
+npm install express body-parser
+nano app.js
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+const PORT = 3000;
+
+// Middleware to parse JSON data from request bodies
+app.use(bodyParser.json());
+
+// In-memory "database" to store movies
+let movies = [];
+
+// Route to create a new movie
+app.post('/movies', (req, res) => {
+  const { title, director, releaseYear, genre } = req.body;
+
+  // Simple validation
+  if (!title || !director || !releaseYear || !genre) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  // Create a new movie object
+  const newMovie = {
+    id: movies.length + 1,  // Auto-incrementing ID
+    title,
+    director,
+    releaseYear,
+    genre
+  };
+
+  // Add the new movie to the "database"
+  movies.push(newMovie);
+
+  // Send a success response
+  res.status(201).json({ message: 'Movie created successfully', movie: newMovie });
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+node app.js
+
+
+
+
+Q.2) Create Angular application that print the name of students who play basketball
+using filter and map method.
+Ans:
+
+ng new studentApp
+cd studentApp
+
+ng generate component basketballPlayers
+
+Modify the Component Code:
+
+basketball-players.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-basketball-players',
+  templateUrl: './basketball-players.component.html',
+  styleUrls: ['./basketball-players.component.css']
+})
+export class BasketballPlayersComponent {
+  students = [
+    { name: 'Alice', playsBasketball: true },
+    { name: 'Bob', playsBasketball: false },
+    { name: 'Charlie', playsBasketball: true },
+    { name: 'Daisy', playsBasketball: false },
+    { name: 'Eve', playsBasketball: true }
+  ];
+
+  // Filtering and mapping students who play basketball
+  basketballPlayers = this.students
+    .filter(student => student.playsBasketball)  // Filter students who play basketball
+    .map(student => student.name);               // Map to an array of their names
+}
+
+basketball-players.component.html
+
+<div>
+  <h2>Students Who Play Basketball</h2>
+  <ul>
+    <li *ngFor="let player of basketballPlayers">{{ player }}</li>
+  </ul>
+</div>
+
+app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+import { BasketballPlayersComponent } from './basketball-players/basketball-players.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    BasketballPlayersComponent
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+app.component.html
+
+<app-basketball-players></app-basketball-players>
+
+ng serve
