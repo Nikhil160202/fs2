@@ -1,0 +1,105 @@
+slip 7. 
+Q1 Create a Node.js application that reads data from multiple files asynchronously
+using promises and async/await.
+Ans:
+mkdir file-reader
+cd file-reader 
+npm init -y
+
+file1.txt
+This is the content of file 1.
+file2.txt
+This is the content of file 2.
+file3.txt
+This is the content of file 3.
+
+nano app.js
+
+const fs = require('fs').promises;  // Using the 'promises' API for async operations
+const path = require('path');
+const readFile = async (filePath) => {
+  try {
+    const data = await fs.readFile(filePath, 'utf8');
+    return data;
+  } catch (err) {
+    console.error(`Error reading file ${filePath}:`, err);
+  }
+};
+const readMultipleFiles = async () => {
+  try {
+ filePaths = [
+      path.join(__dirname, 'file1.txt'),
+      path.join(__dirname, 'file2.txt'),
+      path.join(__dirname, 'file3.txt')
+    ];
+    const fileContents = await Promise.all(filePaths.map(readFile));
+    fileContents.forEach((content, index) => {
+      console.log(`Content of file${index + 1}: \n`, content);
+    });
+  } catch (err) {
+    console.error('Error reading multiple files:', err);
+  }
+};
+readMultipleFiles();
+
+
+run cmd
+node app.js
+
+
+Q2. Create a Node.js application that reads data from multiple files asynchronously
+using promises and async/await.
+Ans:- 
+mkdir express-user-crud
+cd express-user-crud
+npm init -y
+npm install express
+touch server.js
+
+// Import required modules
+const express = require('express');
+const app = express();
+const port = 3000;
+
+// Middleware to parse incoming JSON requests
+app.use(express.json());
+
+// In-memory storage for users (a simple object array)
+let users = [];
+
+// Create operation: POST route to add a new user
+app.post('/users', (req, res) => {
+  const { name, email } = req.body;
+
+  // Simple validation
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Name and email are required' });
+  }
+
+  const newUser = {
+    id: users.length + 1, // Auto-incrementing user ID
+    name,
+    email,
+  };
+
+  users.push(newUser); // Add the new user to the array
+
+  return res.status(201).json(newUser); // Return the created user
+});
+
+// Read operation: GET route to fetch all users
+app.get('/users', (req, res) => {
+  res.status(200).json(users); // Return all users
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+
+
+Start server 
+node server.js
+
+output
+curl http://localhost:3000/users
